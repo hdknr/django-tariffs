@@ -1,0 +1,12 @@
+# Django
+django
+
+# REST
+requests
+
+# Model
+django-ordered-model
+
+# Tools
+ipython
+django-click

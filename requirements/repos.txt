@@ -1,0 +1,1 @@
+-e git+https://github.com/hdknr/django-locations_jp.git#egg=locations_jp
