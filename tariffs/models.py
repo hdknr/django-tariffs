@@ -71,3 +71,13 @@ class Charge(defs.Charge):
          verbose_name = _('Charge')
          verbose_name_plural = _('Charges')
          ordering = ['package', 'seq', ]
+
+
+
+class Slot(defs.Slot):
+    '''Time Slot'''
+
+    class Meta:
+        verbose_name = _('Slot')
+        verbose_name_plural = _('Slots')
+        ordering = ['time_from']

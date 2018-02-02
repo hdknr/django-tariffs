@@ -70,6 +70,7 @@ class PackageForm(forms.ModelForm):
 class PackageAdmin(OrderedModelAdmin):
     form = PackageForm
     raw_id_fields = ['tariff']
+    list_filter = ['tariff']
     list_display = [
         'id', 'tariff', 'slug', 'name', 'delegate_to',
         'default_charge', 'seq', 'move_up_down_links']
@@ -83,3 +84,8 @@ class ChargeAdmin(OrderedModelAdmin):
         'id', 'package', 'charge', 'prefecture', 'city', 'zipcode',
         'seq', 'move_up_down_links']
     readonly_fields = ['seq', 'move_up_down_links',]
+
+
+@admin.register(models.Slot)
+class SlotAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in models.Slot._meta.fields]

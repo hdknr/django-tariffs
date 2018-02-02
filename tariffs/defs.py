@@ -37,3 +37,13 @@ class Charge(OrderedModel):
 
     class Meta:
         abstract = True
+
+
+class Slot(models.Model):
+    '''Time Slot'''
+    label = models.CharField(max_length=50)
+    time_from = models.TimeField(null=True, blank=True, default=None)
+    time_to = models.TimeField(null=True, blank=True, default=None)
+
+    class Meta:
+        abstract = True
