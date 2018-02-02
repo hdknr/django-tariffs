@@ -81,3 +81,6 @@ class Slot(defs.Slot):
         verbose_name = _('Slot')
         verbose_name_plural = _('Slots')
         ordering = ['time_from']
+
+    def __str__(self):
+        return self.label
