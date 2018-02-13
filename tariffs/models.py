@@ -54,6 +54,10 @@ class Package(defs.Package, methods.Package):
      def __str__(self):
          return "{} {}".format(str(self.tariff), self.name)
 
+     def save(self, *args, **kwargs):
+         self.can_mix = (self.mixes.count() > 0)
+         super(Package, self).save(*args, **kwargs)
+
 
 class Charge(defs.Charge):
      package = models.ForeignKey(Package, on_delete=models.CASCADE)

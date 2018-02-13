@@ -23,6 +23,9 @@ class Package(OrderedModel):
     name = models.CharField(max_length=50)
     default_charge = models.DecimalField(
         _('Default Charge'), max_digits=6, decimal_places=0, default=0)
+    free_limit = models.DecimalField(
+        _('Free Limit'), max_digits=8, decimal_places=0, default=1000000)
+    can_mix = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
