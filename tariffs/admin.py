@@ -70,10 +70,10 @@ class PackageForm(forms.ModelForm):
 class PackageAdmin(OrderedModelAdmin):
     form = PackageForm
     raw_id_fields = ['tariff']
-    list_filter = ['tariff']
+    list_filter = ['tariff', 'can_mix']
     list_display = [
         'id', 'tariff', 'slug', 'name', 'delegate_to',
-        'default_charge', 'seq', 'move_up_down_links']
+        'default_charge', 'can_mix', 'free_limit', 'seq', 'move_up_down_links']
     readonly_fields = ['seq', 'move_up_down_links',]
     inlines = [ChargeInline]
 
