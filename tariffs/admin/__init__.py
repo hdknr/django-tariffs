@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django import forms
 from ordered_model.admin import OrderedTabularInline, OrderedModelAdmin
-from . import models, utils
+from tariffs import models, utils
+from . import inlines, forms
+
 
 @admin.register(models.Address)
 class AddressAdmin(admin.ModelAdmin):
@@ -36,46 +37,29 @@ class AddressAdmin(admin.ModelAdmin):
 class TariffAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', ]
     readonly_fields = ['content_type', 'admin_url']
+    inlines = [inlines.PackageInline]
 
     def admin_url(self, obj):
         obj = obj.instance
         return utils.render('''<a href="{{u}}">{{i}}</a>''',
             u=utils.admin_change_url(obj), i=obj)
 
-
-class ChargeInline(admin.TabularInline):
-    model = models.Charge
-    fields = ['charge', 'prefecture', 'city', 'zipcode']
-    extra = 0
-    raw_id_fields =['city']
-
-
-class PackageForm(forms.ModelForm):
-    class Meta:
-        model = models.Package
-        exclude = []
-
-    def __init__(self, *args, **kwargs):
-        super(PackageForm, self).__init__(*args, **kwargs)
-        tariff = getattr(self.instance, 'tariff', None)
-        if tariff:
-            qs = self.fields['delegate_to'].queryset.filter(
-                tariff=tariff, delegate_to__isnull=True)
-            if self.instance.id:
-                qs = qs.exclude(id=self.instance.id)
-            self.fields['delegate_to'].queryset = qs
+    def _create_formsets(self, request, obj, change):
+        setattr(request, '_current_tarrif', obj)
+        return super(TariffAdmin, self)._create_formsets(
+            request, obj, change)
 
 
 @admin.register(models.Package)
 class PackageAdmin(OrderedModelAdmin):
-    form = PackageForm
+    form = forms.PackageForm
     raw_id_fields = ['tariff']
     list_filter = ['tariff', 'can_mix']
     list_display = [
         'id', 'tariff', 'slug', 'name', 'delegate_to',
         'default_charge', 'can_mix', 'free_limit', 'seq', 'move_up_down_links']
     readonly_fields = ['seq', 'move_up_down_links',]
-    inlines = [ChargeInline]
+    inlines = [inlines.ChargeInline]
 
 
 @admin.register(models.Charge)
@@ -84,6 +68,7 @@ class ChargeAdmin(OrderedModelAdmin):
         'id', 'package', 'charge', 'prefecture', 'city', 'zipcode',
         'seq', 'move_up_down_links']
     readonly_fields = ['seq', 'move_up_down_links',]
+    raw_id_fields = ['package', 'prefecture', 'city', ]
 
 
 @admin.register(models.Slot)

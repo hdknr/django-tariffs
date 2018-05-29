@@ -55,7 +55,8 @@ class Package(defs.Package, methods.Package):
          return "{} {}".format(str(self.tariff), self.name)
 
      def save(self, *args, **kwargs):
-         self.can_mix = (self.mixes.count() > 0)
+         if self.id:
+            self.can_mix = (self.mixes.count() > 0)
          super(Package, self).save(*args, **kwargs)
 
 
